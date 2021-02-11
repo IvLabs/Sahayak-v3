@@ -1,0 +1,1 @@
+controller_joint_names: ['', 'Lidar', 'Camera', 'Wheel_left_front_J', 'Wheel_right_front_J', 'Wheel_left_back_J', 'Wheel_right_back_J', ]
