@@ -17,4 +17,8 @@
     pkg="rostopic"
     type="rostopic"
     args="pub /calibrated std_msgs/Bool true" />
+  <param name="robot_description" textfile="$(find sahayak)/urdf/sahayak.urdf" />
+<!-- 
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model sahayak -param robot_description"/> -->
 </launch>
