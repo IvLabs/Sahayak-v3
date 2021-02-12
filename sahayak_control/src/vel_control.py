@@ -1,19 +1,16 @@
-#!~/miniconda3/envs/ros_env/bin python
-
-# Change the above interpreter according to your system
-
+#!/usr/bin/env python
 import rospy
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 import numpy as np
 PI = np.pi
 
-class requbis:
+class sahayak:
     def __init__(self):
-        super().__init__()
-        rospy.init_node('requbis_joint_controller', anonymous=True)
+        #super().__init__()
+        rospy.init_node('sahayak_joint_controller', anonymous=True)
 
-        rospy.Subscriber("requbis/joint_states", JointState, self.torque_callback)
+        rospy.Subscriber("sahayak/joint_states", JointState, self.torque_callback)
 
         self.wheel_mode_time = 3.25 # secs
 
@@ -49,5 +46,5 @@ class requbis:
             # rospy.spin()
 
 if __name__ == '__main__':
-    bot = requbis()
+    bot = sahayak()
     bot.move()
