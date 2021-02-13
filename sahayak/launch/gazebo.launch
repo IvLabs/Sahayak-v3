@@ -1,6 +1,16 @@
 <launch>
+  <arg name="debug" default="false" />
+  <arg name="gui" default="true" />
+  <arg name="pause" default="false" />
+  <arg name="world" default="$(find sahayak)/world/cafe.world" />
   <include
-    file="$(find gazebo_ros)/launch/empty_world.launch" />
+    file="$(find gazebo_ros)/launch/empty_world.launch" >
+     <arg name="world_name" value="$(arg world)" />
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg pause)" />
+    <arg name="use_sim_time" value="true" />
+  </include>
   <node
     name="tf_footprint_base"
     pkg="tf"
@@ -10,11 +20,15 @@
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -model sahayak"
+    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -x -0.05 -y 0.073 -z 0.29 -R -1.57 -P 0.00 -Y -3.134 -model sahayak"
     output="screen" />
   <node
     name="fake_joint_calibration"
     pkg="rostopic"
     type="rostopic"
     args="pub /calibrated std_msgs/Bool true" />
+  <param name="robot_description" textfile="$(find sahayak)/urdf/sahayak.urdf" />
+<!-- 
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model sahayak -param robot_description"/> -->
 </launch>
