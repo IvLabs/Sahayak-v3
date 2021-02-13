@@ -20,7 +20,7 @@
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -model sahayak"
+    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -x -0.05 -y 0.073 -z 0.29 -R -1.57 -P 0.00 -Y -3.134 -model sahayak"
     output="screen" />
   <node
     name="fake_joint_calibration"
