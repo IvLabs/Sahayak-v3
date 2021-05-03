@@ -1,6 +1,7 @@
 # Visual Odometry
 ## Running
 * Install rowan `pip install rowan`
+* Launch `launch_all.launch` before, this publishes all the prerequisite topics.
 * Run the python file of your choosing and control the bot.
 
 ## Attempts:
