@@ -1,4 +1,13 @@
 #!/usr/bin/env python
+
+#Teleoperation
+#Left arrow key - robot moves left
+#right arrow key - robot moves right
+#up arrow key - robot moves forward
+#down arrow key - robot moves back
+#Enter - robot stops
+#make sure you install the pynput library
+
 import rospy
 from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
@@ -8,9 +17,10 @@ from pynput.keyboard import Listener, Key
 
 PI = np.pi
 
+
 class sahayak:
     def __init__(self):
-        #super().__init__()
+
         rospy.init_node('sahayak_joint_controller', anonymous=True)
 
         rospy.Subscriber("sahayak/joint_states", JointState, self.torque_callback)
@@ -28,7 +38,7 @@ class sahayak:
         self.rate = rospy.Rate(100)
 
     def torque_callback(self, data):
-        # rospy.loginfo("\r {}".format(data))
+
         self.data = data
 
     def move(self):
@@ -105,7 +115,7 @@ def on_release(key):
     if key == keyboard.Key.esc:
         return False
 
-# Collect events until released
+
            
 if __name__ == '__main__':
     bot = sahayak()
