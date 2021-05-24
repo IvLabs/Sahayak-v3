@@ -6,7 +6,7 @@
 * launch the maps with/without running the optical flow node(rtab has its own VO node and hector makes grid maps with 2d lidar only).
 
 ## Attempts:
-The best attempt is `pnp.py`, uses PnP with Ransac to perform 3D-2D motion estimation.
+The best attempt is `optical_flow.py`, uses PnP with Ransac to perform 3D-2D motion estimation.
 
 Results: [Drive Link](https://drive.google.com/file/d/1cUCRjERNW7lkDszR3cxhvb3hW1r-Ev1N/view?usp=sharing)
 
