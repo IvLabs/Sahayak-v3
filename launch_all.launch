@@ -1,6 +1,6 @@
 <launch>
   <include file="$(find sahayak)/launch/gazebo.launch" />
-
+  
   <include file="$(find sahayak_control)/launch/sahayak_control.launch" />
 
   <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
@@ -22,6 +22,9 @@
   
   <node name="relayer" pkg="topic_tools" type="relay" args="/r200/camera/depth/camera_info /r200/mycamera/depth/camera_info" respawn="true" />
 
+<node name="vel_control" pkg="sahayak_control" type="vel_control.py" />
+
+<node name="ground_truth" pkg="visual_odom" type="ground_truth.py" />
   
   <node pkg="nodelet" type="nodelet" name="nodelet4"
         args="load depth_image_proc/point_cloud_xyz nodelet_manager">
