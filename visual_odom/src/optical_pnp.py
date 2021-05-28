@@ -7,29 +7,67 @@ from sensor_msgs.msg import Image, PointCloud2 , CameraInfo
 from sensor_msgs import point_cloud2
 from message_filters import ApproximateTimeSynchronizer, Subscriber
 import tf
+from tf2_msgs.msg import TFMessage
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from scipy.spatial.transform import Rotation as Rt
+import scipy
+print(scipy.__version__)
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 import rowan
-from tf.transformations import quaternion_from_matrix
-#from rowan import from_matrix
 
 plt.ion()
 bridge = CvBridge()
 fast = cv2.FastFeatureDetector_create()
 fast.setNonmaxSuppression(1)
-# Parameters for good featurestotrack kanade optical flow
-feature_params = dict(maxCorners=400, qualityLevel=0.2, minDistance=5, blockSize=7)
+
 
 #init ros node and taking first img ,pointcloud and camera parameters
 rospy.init_node("imgread", anonymous=True)
 odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
 odom_broadcaster = tf.TransformBroadcaster()
 
+
+#transformation between baselink and odometry
+tf_id = 0
+tf_msg = rospy.wait_for_message("/tf_static", TFMessage)
+for i in range(len(tf_msg.transforms)):
+    if(tf_msg.transforms[i].header.frame_id == "base_link" and tf_msg.transforms[i].child_frame_id == "rs200_camera"):
+        tf_id = i
+        print(tf_id)
+tx_b_c = tf_msg.transforms[tf_id].transform.translation.x
+ty_b_c = tf_msg.transforms[tf_id].transform.translation.y
+tz_b_c = tf_msg.transforms[tf_id].transform.translation.z
+qx_b_c = tf_msg.transforms[tf_id].transform.rotation.x
+qy_b_c = tf_msg.transforms[tf_id].transform.rotation.y
+qz_b_c = tf_msg.transforms[tf_id].transform.rotation.z
+qw_b_c = tf_msg.transforms[tf_id].transform.rotation.w
+R_b_c= Rt.from_quat([qx_b_c,qy_b_c ,qz_b_c,qw_b_c])
+R_b_c = R_b_c.as_dcm().reshape((3,3))
+transformation_b_c = np.zeros((3,4))
+transformation_b_c[:,:3] = R_b_c
+transformation_b_c[0,3] = tx_b_c
+transformation_b_c[1,3] = ty_b_c
+transformation_b_c[2,3] = tz_b_c
+temp = np.zeros((3,1))
+temp[0][0] = -1*tx_b_c
+temp[1][0] = -1*ty_b_c
+temp[2][0] = -1*tz_b_c
+R_c_b= R_b_c.T
+temp = np.matmul(R_b_c.T,temp)
+transformation_c_b = np.zeros((3,4))
+transformation_c_b[:,:3] = R_c_b
+transformation_c_b[0,3] = temp[0][0]
+transformation_c_b[1,3] = temp[1][0]
+transformation_c_b[2,3] = temp[2][0]
+print(transformation_c_b,transformation_b_c)
+
+
+
+#waiting for first msg (image,depth,camera_info)
 prev_rgb = rospy.wait_for_message("/r200/mycamera/color/color_rect", Image)
 prev_rgb = bridge.imgmsg_to_cv2(prev_rgb, "bgr8")
 
@@ -47,17 +85,14 @@ K = np.asarray(camera_info_msg.K).reshape((3, 3))
 
 #finding kps of first frame
 prev_gray = cv2.cvtColor(prev_rgb, cv2.COLOR_BGR2GRAY)
-# create a CLAHE object (Arguments are optional).
+# a CLAHE object (Arguments are optional).
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 prev_gray = clahe.apply(prev_gray)
-#p0 = cv2.goodFeaturesToTrack(prev_gray, mask=None, **feature_params)
-#print(p0,p0.shape)
-test = fast.detect(prev_gray,None)
-test = cv2.KeyPoint_convert(test)
-p0 = test.reshape((-1,1,2))
+p0 = fast.detect(prev_gray,None)
+p0 = cv2.KeyPoint_convert(p0)
+p0 = p0.reshape((-1,1,2))
 
-#print(p0,p0.shape)
-#print(test.shape)
+
 
 def get_features_xyz(prev_kp, kp, prev_cloud, cloud):
     xyz1 = []
@@ -78,10 +113,14 @@ def get_features_xyz(prev_kp, kp, prev_cloud, cloud):
                 xyz2.append(pt2)
     return np.asarray(xyz1), np.asarray(xyz2)
 
-'''def rmat_to_quaternion(rmat):
-    #r = Rt.from_matrix(rmat)
-    q = rmat.as_quat()
-    return q'''
+
+
+def rmat_to_quaternion(rmat):
+    r = Rt.from_dcm(rmat)
+    q = r.as_quat()
+    return q
+
+
 
 def ekf_info(msg):
     filtered_tran = np.zeros((3,1))
@@ -92,31 +131,50 @@ def ekf_info(msg):
     y1 = msg.pose.pose.orientation.y
     z1 = msg.pose.pose.orientation.z
     w1 = msg.pose.pose.orientation.w
-    #q = Rt.from_quat([x1,y1,z1,w1])
-    #rot = q.as_matrix()
-    return filtered_tran
+    q = Rt.from_quat([x1,y1,z1,w1])
+    rot = q.as_dcm().reshape((3,3))
+    return filtered_tran,rot
+
 
 def odom_publisher(rotations,trajectory,trust):
+    trans_curr = np.eye(4)
+    trans_curr[:3,:3] = rotations[-1]
+    trans_curr[:3,3] = trajectory[-1].reshape(trans_curr[:3,3].shape)
+    xyz = np.matmul(transformation_c_b,trans_curr)
+    r_prev = xyz[:3,:3]
+    t_prev = xyz[:3,3].reshape((3,1))
+    print(r_prev,t_prev)
     current_time = rospy.Time.now()
-    odom_quat = rowan.from_matrix(rotations[-1])
-
-    x = trajectory[-1][0][0]
-    y = trajectory[-1][1][0]
-    z = trajectory[-1][2][0]
+    odom_quat = rmat_to_quaternion(r_prev)
+    odom_broadcaster = tf.TransformBroadcaster()
+    x = t_prev[0][0]
+    y = t_prev[1][0]
+    z = t_prev[2][0]
 
     max_covariance = 100000
     odom = Odometry()
     odom.header.stamp = current_time
     odom.header.frame_id = "rs200_camera"
     odom.pose.pose = Pose(Point(x, y,z), Quaternion(*odom_quat))
-    odom.pose.covariance = ((1/trust)*np.eye(6)).flatten()
+    odom.pose.covariance = ((5/trust)*np.eye(6)).flatten()
 
     odom.child_frame_id = "base_link"
     odom.twist.twist = Twist(Vector3(0, 0, 0), Vector3(0, 0, 0))
     odom.twist.covariance = (max_covariance*np.eye(6)).flatten() 
 
+    #odom_broadcaster.sendTransform(odom)
+    odom_broadcaster.sendTransform(
+        (x, y,z),
+        odom_quat,
+        current_time,
+        odom.child_frame_id,
+        odom.header.frame_id
+        
+    )
     # publish the message
     odom_pub.publish(odom)
+
+
 
 def optical_flow_matches(gray,prev_gray,p0):
     # Parameters for lucas kanade optical flow
@@ -132,6 +190,8 @@ def optical_flow_matches(gray,prev_gray,p0):
     good_new = p1[st == 1]
     good_old = p0[st == 1]
     return good_new,good_old
+
+
 
 def get_features_xyz_xy(prev_kp, kp, prev_cloud, cloud):
     xyz1 = []
@@ -153,27 +213,49 @@ def get_features_xyz_xy(prev_kp, kp, prev_cloud, cloud):
                 xy2.append(pt2)
     return np.asarray(xyz1).reshape((-1,3,1)).astype(np.float32), np.asarray(xy2).reshape((-1,2,1)).astype(np.float32)
 
+
+#taking initial pose as gt;
+print("/gt")
 gt_msg = rospy.wait_for_message("/gt", Pose)
 temp = np.zeros((3,1))
 temp[0][0] = gt_msg.position.x
 temp[1][0] = gt_msg.position.y
 temp[2][0] = gt_msg.position.z
-#g_truth.append(temp)
-#z_motion = []
-#y_rotations = []
-NUM_CALLED = 0
-trajectory = []
-robot_pose = []
-robot_pose.append(np.eye(4))
-motion = []
+
 rotations = []
 NUM_CALLED = 0
 trajectory = []
 rotations.append(np.eye(3))
 g_truth = []
 g_truth.append(temp)
-trajectory.append(temp)
 
+trans_prev = np.eye(4)
+trans_prev[:3,:3] = (Rt.from_quat([gt_msg.orientation.x,
+    gt_msg.orientation.y, 
+    gt_msg.orientation.z, 
+    gt_msg.orientation.w ])).as_dcm().reshape((3,3))
+
+trans_prev[:3,3] = temp.reshape(trans_prev[:3,3].shape)
+print(":)")
+xyz = np.matmul(transformation_b_c,trans_prev)
+r_prev = xyz[:3,:3]
+t_prev = xyz[:3,3].reshape((3,1))
+
+rotations.append(xyz[:3,:3])
+trajectory.append(xyz[:3,3].reshape((3,1)))
+print(g_truth,trajectory)
+
+trans_curr = np.eye(4)
+trans_curr[:3,:3] = rotations[-1]
+trans_curr[:3,3] = trajectory[-1].reshape(trans_curr[:3,3].shape)
+xyz = np.matmul(transformation_c_b,trans_curr)
+r_prev = xyz[:3,:3]
+t_prev = xyz[:3,3].reshape((3,1))
+print(r_prev,t_prev)
+ekf_traj = []
+
+
+print(g_truth,trajectory)
 def on_recieve(rgb, cloud ,g_t):
     global prev_rgb, prev_cloud, p0, prev_gray, NUM_CALLED, mask
     temp = np.zeros((3,1))
@@ -182,6 +264,8 @@ def on_recieve(rgb, cloud ,g_t):
     temp[2][0] = g_t.position.z
     print("Started ", NUM_CALLED)
     g_truth.append(temp)
+    #tekf,rekf = ekf_info(ekf_output)
+    #ekf_traj.append(tekf)
     #print(g_t)
     rgb = bridge.imgmsg_to_cv2(rgb, "bgr8")
     gray = cv2.cvtColor(rgb, cv2.COLOR_BGR2GRAY)
@@ -224,11 +308,11 @@ def on_recieve(rgb, cloud ,g_t):
             if inliers is None or len(inliers) == 0:
                 trust = 0.01
                 print("less inliers")
-                print("using 3d to 3d approch")
+                print("using 3d to 3d")
                 xyz1, xyz2 = get_features_xyz(good_old, good_new, prev_cloud, cloud)
                 R, t = rowan.mapping.davenport(np.asarray(xyz1), np.asarray(xyz2))
-                position =  trajectory[-1] - np.dot(rotations[-1],t)
-                rotations.append(np.dot(rotations[-1],R))
+                position =  trajectory[-1] - np.matmul(rotations[-1],t)
+                rotations.append(np.matmul(rotations[-1],R))
                 trajectory.append(position)
                 prev_rgb = rgb.copy()
                 prev_gray = gray.copy()
@@ -249,23 +333,25 @@ def on_recieve(rgb, cloud ,g_t):
                 trust = len(inliers)
                 trust = min(trust,features_detected)
                 rmat, _ = cv2.Rodrigues(rvec)
-                position =  trajectory[-1] - np.dot(rotations[-1],tvec)
-                rotations.append(np.dot(rotations[-1],rmat))
+                position =  trajectory[-1] - np.matmul(rotations[-1],tvec)
+                rotations.append(np.matmul(rotations[-1],rmat))
                 trajectory.append(position)
                 odom_publisher(rotations,trajectory,trust)
                 #3d plottingrosrun tf view_frames
                 traj = np.asarray(trajectory).reshape((-1,3))
                 ground_traj = np.asarray(g_truth).reshape((-1,3))
+                #filtered_traj = np.asarray(ekf_traj).reshape((-1,3))
                 #plt.subplot(1, 2, 1, projection='3d').plot(traj[:, 0], traj[:, 1], traj[:, 2])
                 #plt.subplot(1, 2, 2, projection='3d').plot(ground_traj[:, 0], -1*ground_traj[:, 1], -1*ground_traj[:, 2])
-                plt.plot(traj[:, 0], -1*traj[:, 2],color='blue')
+                plt.plot(-1*traj[:, 2], -1*traj[:, 0],color='blue')
                 plt.plot(ground_traj[:, 0], ground_traj[:, 1],color='red')
+                #plt.plot(filtered_traj[:, 0], filtered_traj[:, 1],color='green')
                 plt.xlabel("x ")
                 plt.ylabel("y")
                 plt.show()
                 plt.pause(0.01)
                 
-
+                #print(trajectory[-1],g_truth[-1])
                 #listener = tf.TransformListener()
                 #(trans,rot) = listener.lookupTransform( 'base_link',"rs200_camera", rospy.Time(0))
                 #print(trans,rot)
@@ -290,7 +376,7 @@ def on_recieve(rgb, cloud ,g_t):
 image_sub = Subscriber("/r200/mycamera/color/color_rect", Image)
 cloud_sub = Subscriber("/camera/depth/points", PointCloud2)
 sub1 = Subscriber("/gt", Pose)
-
+#filtered_output = Subscriber("/odometry/filtered", Odometry)
 
 #should subscribe to localization node which will provide starting rotation and translation in case camera is unable to detect any features. 
 
@@ -301,3 +387,4 @@ ats = ApproximateTimeSynchronizer(
 ats.registerCallback(on_recieve)
 
 rospy.spin()
+

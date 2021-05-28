@@ -24,7 +24,7 @@
   <arg name="rviz"                    default="false" />
   
   <!-- Localization-only mode -->
-  <arg name="localization"            default="false"/>
+  <arg name="localization"            default="true"/>
   
   <!-- sim time for convenience, if playing a rosbag -->
   <arg name="use_sim_time"            default="false"/>
@@ -60,7 +60,7 @@
   <arg name="rgb_topic"               default="/r200/mycamera/color/color_rect" />
   <arg name="depth_topic"             default="/r200/camera/depth/image_raw" />
   <arg name="camera_info_topic"       default="/r200/camera/color/camera_info" />
-  <arg name="depth_camera_info_topic" default="$(arg camera_info_topic)" />
+  <arg name="depth_camera_info_topic" default="$(arg camera_info_topic)" /> 
   
   <!-- stereo related topics -->
   <arg name="stereo_namespace"        default="/stereo_camera"/>
@@ -91,10 +91,10 @@
   <arg name="scan_cloud_max_points"   default="0"/>
   <arg name="scan_cloud_filtered"     default="false"/> <!-- use filtered cloud from icp_odometry for mapping -->
   <arg name="gen_scan"                default="false"/> <!-- only works with depth image and if not subscribing to scan topic-->
-   
+  
   <arg name="visual_odometry"          default="true"/>          <!-- Launch rtabmap visual odometry node -->
   <arg name="icp_odometry"             default="false"/>         <!-- Launch rtabmap icp odometry node -->
-  <arg name="odom_topic"               default="visual_odom"/>          <!-- Odometry topic name -->
+  <arg name="odom_topic"               default="/odom"/>          <!-- Odometry topic name -->
   <arg name="vo_frame_id"              default="base_link"/> <!-- Visual/Icp odometry frame ID for TF -->
   <arg name="publish_tf_odom"          default="true"/>
   <arg name="odom_tf_angular_variance" default="1"/>             <!-- If TF is used to get odometry, this is the default angular variance -->
@@ -106,7 +106,7 @@
   <arg name="odom_guess_min_rotation"    default="0"/>
   <arg name="odom_max_rate"            default="0"/>
   <arg name="odom_expected_rate"       default="0"/>
-  <arg name="imu_topic"                default="/imu_data"/>          <!-- only used with VIO approaches -->
+  <arg name="imu_topic"                default="/imu"/>          <!-- only used with VIO approaches -->
   <arg name="wait_imu_to_init"         default="false"/>
   <arg name="use_odom_features"        default="false"/>
   
