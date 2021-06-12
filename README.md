@@ -8,7 +8,7 @@ Implemented Visual Odometry pipeline using the following
 
 <img src="https://user-images.githubusercontent.com/64685403/121784729-37d25000-cbd3-11eb-9314-2a5fbb041a9a.png" width="400">
 
-* 3D to 3D Motion Estimation Algorithm
+* 3D to 2D Motion Estimation Algorithm
 <img src="https://user-images.githubusercontent.com/64685403/121784831-e4accd00-cbd3-11eb-8202-94722c2689f7.png" width="400">
 
 ---
