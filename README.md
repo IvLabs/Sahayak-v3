@@ -1,6 +1,8 @@
 # Sahayak-v3
 ---
 ## Ros Controls:
+Teleoperation using keyboard inputs
+
 <img src="https://user-images.githubusercontent.com/64685403/121785722-15dbcc00-cbd9-11eb-86ee-6b86179110eb.gif" width="500">
 
 
