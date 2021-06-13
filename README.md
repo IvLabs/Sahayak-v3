@@ -4,6 +4,11 @@
 ``` shell
 pip install -r requirement.txt
 ```
+## required ros packages
+``` shell
+xargs sudo apt install < ros_requirements.txt
+```
+
 ## Result
 ### Ros Controls:
 Teleoperation using keyboard inputs
