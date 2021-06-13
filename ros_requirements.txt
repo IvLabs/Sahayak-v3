@@ -1,7 +1,7 @@
 ros-melodic-rtabmap
 ros-melodic-navigation
 ros-melodic-tf
-ros-melodic-hector-mapping
+ros-melodic-hector-slam
 ros-melodic-gmapping
 ros-melodic-ros-control
 ros-melodic-joint-state-publisher
