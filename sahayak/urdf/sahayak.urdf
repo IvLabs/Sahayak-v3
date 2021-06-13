@@ -4,6 +4,17 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="sahayak">
+  <link name="pseudo_base" />
+  <joint name="base2base_joint" 
+         type = "fixed" >
+         <origin 
+                 xyz = "0 0 0"
+                 rpy = "1.54 1.54 0"/>
+         <parent link = "base_link" />
+         <child  link = "pseudo_base"  />
+
+  </joint>
+
   <link
     name="base_link">
     <inertial>
@@ -604,24 +615,23 @@
 </joint>
 
 <link name="rplidar">
-
   <inertial>
-    <pose>0 0 0 0 0 0</pose>
-    <mass>0.19</mass>
-    <inertia>
-      <ixx>4.15e-6</ixx>
-      <ixy>0</ixy>
-      <ixz>0</ixz>
-      <iyy>2.407e-6</iyy>
-      <iyz>0</iyz>
-      <izz>2.407e-6</izz>
-    </inertia>
-  </inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.19" />
+      <inertia
+        ixx="0.0020396"
+        ixy="2.2827E-14"
+        ixz="9.0095E-14"
+        iyy="0.0010807"
+        iyz="3.0251E-08"
+        izz="0.0010807" />
+    </inertial>
   <visual name="visual">
     <geometry>
-      <box>
-        <size>0.02 0.05 0.05</size>
-      </box>
+      <box size = "0.02 0.05 0.05"/>
     </geometry>
   </visual>
 </link>
@@ -657,12 +667,34 @@
     <visualize>true</visualize>
   </sensor>
 </gazebo>
+
 <!-- IMU Gazebo Plugin-->
-<link name = "imu_link"></link>
+<link name = "imu_link">
+<inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.001" />
+      <inertia
+        ixx="0.0020396"
+        ixy="2.2827E-14"
+        ixz="9.0095E-14"
+        iyy="0.0010807"
+        iyz="3.0251E-08"
+        izz="0.0010807" />
+  </inertial>
+  <visual name="visual">
+    <geometry>
+      <box size = "0.001 0.001 0.001"/>
+    </geometry>
+  </visual>
+</link>
 <joint name="imu_joint" type="fixed">
      <parent link="base_link"/>
      <child link="imu_link"/>
-   </joint>
+     <origin xyz="0 0 0" rpy="1.57 0 0"/>
+</joint>
 <gazebo reference="imu_link">
   <gravity>true</gravity>
   <sensor name="imu_sensor" type="imu">
@@ -673,7 +705,7 @@
     <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
       <topicName>imu</topicName>
       <bodyName>imu_link</bodyName>
-      <updateRateHZ>10.0</updateRateHZ>
+      <updateRateHZ>50</updateRateHZ>
       <gaussianNoise>0.5</gaussianNoise>
       <xyzOffset>0 0 0</xyzOffset>
       <rpyOffset>0 0 0</rpyOffset>
@@ -683,25 +715,26 @@
     <pose>0 0 0 0 0 0</pose>
   </sensor>
 </gazebo>
-<gazebo>
-  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-    <robotNamespace>sahayak</robotNamespace>
-  </plugin>
-</gazebo>
-<!--my code-->
+
+<!-- Gazebo Ground Truth Plugin-->
 <gazebo>
   <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
     <alwaysOn>true</alwaysOn>
-    <updateRate>5.5</updateRate>
-    <bodyName>base_link</bodyName>
+    <updateRate>50.0</updateRate>
+    <bodyName>pseudo_base</bodyName>
     <topicName>ground_truth/state</topicName>
     <gaussianNoise>0.01</gaussianNoise>
-    <frameName>map</frameName>
+    <frameName>world</frameName>
     <xyzOffsets>0 0 0</xyzOffsets>
     <rpyOffsets>0 0 0</rpyOffsets>
   </plugin>
 </gazebo>
 
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotNamespace>sahayak</robotNamespace>
+  </plugin>
+</gazebo>
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="Wheel_right_back_J">
