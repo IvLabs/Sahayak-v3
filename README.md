@@ -51,6 +51,11 @@ https://drive.google.com/file/d/173dWtAgQprP5A2eiIHDtA-GP9SdjEXO3/view?usp=shari
 <img src="https://user-images.githubusercontent.com/64797216/121785126-98628c80-cbd5-11eb-9d54-c349228d4ee7.gif" width="500">
 </p>
 
+* Gmapping:
+<p align="center">
+<img src="https://user-images.githubusercontent.com/64685403/125203658-fa76e600-e296-11eb-9370-4e5d6b743dc7.PNG" height="300">
+</p>
+
 ---
 
 ### Localisation:
