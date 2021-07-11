@@ -1,0 +1,30 @@
+#map_type: costmap
+meter_scoring: true
+
+obstacle_range: 3.0
+raytrace_range: 3.5
+
+publish_voxel_map: false
+transform_tolerance: 0.5
+
+# default values
+#footprint: [[0.23, -0.265], [0.315, -0.14], [0.315, 0.14], [0.23, 0.265], [-0.23, 0.265], [-0.315, 0.14], [-0.315, -0.14], [-0.23, -0.265]]
+#footprint: [[-0.315, -0.14], [-0.315, 0.14], [-0.22, 0.265], [0.22, 0.265], [0.315, 0.14], [0.315, -0.14], [0.22, -0.265], [-0.22, -0.265]]
+#footprint_padding: 0.015
+
+# length = 0.51m Breath = 0.4m actual 
+# radius comes out to be = 0.328024
+robot_radius: 0.4
+
+
+obstacle_layer:
+  observation_sources: scan
+  scan: {sensor_frame: rplidar, data_type: LaserScan, topic: /laser/scan, marking: true, clearing: true, obstacle_range: 3.0, raytrace_range: 3.5}
+
+inflation_layer:
+  enabled: true
+  cost_scaling_factor: 0.3
+  inflation_radius: 0.5
+
+static_layer:
+  enabled: true

@@ -4,17 +4,6 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="sahayak">
-  <link name="pseudo_base" />
-  <joint name="base2base_joint" 
-         type = "fixed" >
-         <origin 
-                 xyz = "0 0 0"
-                 rpy = "1.54 1.54 0"/>
-         <parent link = "base_link" />
-         <child  link = "pseudo_base"  />
-
-  </joint>
-
   <link
     name="base_link">
     <inertial>
@@ -25,11 +14,11 @@
         value="8.6173" />
       <inertia
         ixx="0.27411"
-        ixy="-0.00011744"
-        ixz="-0.00013001"
-        iyy="0.22112"
-        iyz="0.011125"
-        izz="0.31248" />
+        ixy="-0.00013001"
+        ixz="0.00011744"
+        iyy="0.31248"
+        iyz="-0.011125"
+        izz="0.22112" />
     </inertial>
     <visual>
       <origin
@@ -96,11 +85,11 @@
     </collision>
   </link>
   <joint
-    name="Lidar1"
-    type="revolute">
+    name="Lidar_J"
+    type="fixed">
     <origin
-      xyz="0 -0.8025 -0.24"
-      rpy="3.1416 1.5469 0" />
+      xyz="0 -0.4025 0.9125"
+      rpy="1.5708 0 1.5469" />
     <parent
       link="base_link" />
     <child
@@ -154,17 +143,17 @@
     </collision>
   </link>
   <joint
-    name="Camera"
+    name="Camera_J"
     type="revolute">
     <origin
-      xyz="1.1752E-05 -0.54426 0.237"
-      rpy="0 0 0" />
+      xyz="1.1752E-05 0.0745 0.65426"
+      rpy="-1.5708 0 0" />
     <parent
       link="base_link" />
     <child
       link="Camera" />
     <axis
-      xyz="0 0 0" />
+      xyz="0 -1 0" />
     <limit
       lower="0"
       upper="0"
@@ -175,7 +164,7 @@
     name="Wheel_left_front">
     <inertial>
       <origin
-        xyz="-0.012193 -3.2833E-11 -7.0906E-13"
+        xyz="-0.012193 -3.2831E-11 -4.0009E-13"
         rpy="0 0 0" />
       <mass
         value="0.7218" />
@@ -215,7 +204,7 @@
     name="Wheel_left_front_J"
     type="continuous">
     <origin
-      xyz="-0.21342 0.025 0.1875"
+      xyz="-0.21342 0.025 0.085"
       rpy="1.5708 0 0" />
     <parent
       link="base_link" />
@@ -226,25 +215,34 @@
     <limit
       lower="0"
       upper="0"
-      effort="0.67"
+      effort="1"
       velocity="6.28" />
     <dynamics
       friction="0.05" />
   </joint>
+  <!-- <gazebo reference="Wheel_left_front">
+      <material>Gazebo/${color}</material>
+      <kp>10000000.0</kp>
+      <kd>1.0</kd>
+      <mu1>4.0</mu1>
+      <mu2>4.0</mu2>
+      <maxVel>0.0</maxVel>
+      <minDepth>0.001</minDepth>
+  </gazebo> -->
   <link
     name="Wheel_right_front">
     <inertial>
       <origin
-        xyz="0.012193 -1.4214E-11 -2.9603E-11"
+        xyz="-0.012193 -1.4212E-11 2.8918E-11"
         rpy="0 0 0" />
       <mass
         value="0.7218" />
       <inertia
         ixx="0.0020396"
-        ixy="-1.9528E-14"
+        ixy="1.9528E-14"
         ixz="-9.0864E-14"
         iyy="0.0010807"
-        iyz="2.9783E-08"
+        iyz="-2.9783E-08"
         izz="0.0010807" />
     </inertial>
     <visual>
@@ -275,27 +273,35 @@
     name="Wheel_right_front_J"
     type="continuous">
     <origin
-      xyz="0.21342 0.025 0.1875"
-      rpy="1.5708 0 0" />
+      xyz="0.21342 0.025 0.085"
+      rpy="1.5708 0 3.1416" />
     <parent
       link="base_link" />
     <child
       link="Wheel_right_front" />
     <axis
-      xyz="-1 0 0" />
+      xyz="1 0 0" />
     <limit
       lower="0"
       upper="0"
-      effort="0.67"
+      effort="1"
       velocity="6.28" />
     <dynamics
       friction="0.05" />
   </joint>
+        <!-- <gazebo reference="Wheel_right_front">
+            <kp>10000000.0</kp>
+            <kd>1.0</kd>
+            <mu1>4.0</mu1>
+            <mu2>4.0</mu2>
+            <maxVel>0.0</maxVel>
+            <minDepth>0.001</minDepth>
+        </gazebo> -->
   <link
     name="Wheel_left_back">
     <inertial>
       <origin
-        xyz="-0.012193 -2.4305E-11 -2.208E-11"
+        xyz="-0.012193 -2.4303E-11 2.2111E-10"
         rpy="0 0 0" />
       <mass
         value="0.7218" />
@@ -335,7 +341,7 @@
     name="Wheel_left_back_J"
     type="continuous">
     <origin
-      xyz="-0.21192 0.025 -0.1875"
+      xyz="-0.21192 -0.35 0.085"
       rpy="1.5708 0 0" />
     <parent
       link="base_link" />
@@ -346,25 +352,33 @@
     <limit
       lower="0"
       upper="0"
-      effort="0.67"
+      effort="1"
       velocity="6.28" />
     <dynamics
       friction="0.05" />
   </joint>
+        <!-- <gazebo reference="Wheel_left_back">
+            <kp>10000000.0</kp>
+            <kd>1.0</kd>
+            <mu1>4.0</mu1>
+            <mu2>4.0</mu2>
+            <maxVel>0.0</maxVel>
+            <minDepth>0.001</minDepth>
+        </gazebo> -->
   <link
     name="Wheel_right_back">
     <inertial>
       <origin
-        xyz="0.012193 1.5278E-11 2.9067E-11"
+        xyz="-0.012193 1.5278E-11 5.3959E-11"
         rpy="0 0 0" />
       <mass
         value="0.7218" />
       <inertia
         ixx="0.0020396"
-        ixy="2.2827E-14"
+        ixy="-2.2827E-14"
         ixz="9.0095E-14"
         iyy="0.0010807"
-        iyz="3.0251E-08"
+        iyz="-3.0251E-08"
         izz="0.0010807" />
     </inertial>
     <visual>
@@ -391,26 +405,35 @@
       </geometry>
     </collision>
   </link>
+
   <joint
     name="Wheel_right_back_J"
     type="continuous">
     <origin
-      xyz="0.21192 0.025 -0.1875"
-      rpy="1.5708 0 0" />
+      xyz="0.21192 -0.35 0.085"
+      rpy="1.5708 0 3.1416" />
     <parent
       link="base_link" />
     <child
       link="Wheel_right_back" />
     <axis
-      xyz="-1 0 0" />
+      xyz="1 0 0" />
     <limit
       lower="0"
       upper="0"
-      effort="0.67"
+      effort="1"
       velocity="6.28" />
     <dynamics
       friction="0.05" />
   </joint>
+        <!-- <gazebo reference="Wheel_right_back">
+            <kp>10000000.0</kp>
+            <kd>1.0</kd>
+            <mu1>4.0</mu1>
+            <mu2>4.0</mu2>
+            <maxVel>0.0</maxVel>
+            <minDepth>0.001</minDepth>
+        </gazebo> -->
   <!-- Camera link -->
   <link name="rs200_camera">
     <visual>
@@ -443,8 +466,8 @@
 <!-- Connect camera to parent frame-->
 <joint name="realsense_joint" type="fixed">
     <origin
-      xyz="1.1752E-05 -0.54426 0.237"
-      rpy="0 -1.570 1.570" />
+      xyz="1.1752E-05 0.0745 0.65426"
+      rpy="0 0 1.57" />
     <parent link="base_link"/>
     <child link="rs200_camera"/>
     <axis xyz="0 0 0"/>
@@ -605,33 +628,38 @@
 </gazebo>
 
 
-
 <joint name="rplidar_joint" type="fixed" >
   <origin 
-    xyz="0 -0.8025 -0.24"
-    rpy="1.570 1.5469 0" />
+    xyz="0 -0.4025 0.9125"
+    rpy="3.14 0 1.5469"  />
   <parent link="base_link" />
   <child link="rplidar"/>
 </joint>
 
 <link name="rplidar">
+
   <inertial>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <mass
-        value="0.19" />
-      <inertia
-        ixx="0.0020396"
-        ixy="2.2827E-14"
-        ixz="9.0095E-14"
-        iyy="0.0010807"
-        iyz="3.0251E-08"
-        izz="0.0010807" />
-    </inertial>
+    <pose>0 0 0 0 0 0</pose>
+    <mass value="0.19"/>
+<!--     <inertia>
+      <ixx value="4.15e-6"/>
+      <ixy value="0"/>
+      <ixz value="0"/>
+      <iyy value="2.407e-6"/>
+      <iyz value="0"/>
+      <izz value="2.407e-6"/>
+    </inertia> -->
+          <inertia
+        ixx="4.15e-6"
+        ixy="0"
+        ixz="0"
+        iyy="2.407e-6"
+        iyz="0"
+        izz="2.407e-6"/>
+  </inertial>
   <visual name="visual">
     <geometry>
-      <box size = "0.02 0.05 0.05"/>
+      <box size="0.02 0.05 0.05" />
     </geometry>
   </visual>
 </link>
@@ -716,25 +744,25 @@
   </sensor>
 </gazebo>
 
-<!-- Gazebo Ground Truth Plugin-->
+
+
 <gazebo>
   <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
     <alwaysOn>true</alwaysOn>
-    <updateRate>50.0</updateRate>
-    <bodyName>pseudo_base</bodyName>
+    <updateRate>5.5</updateRate>
+    <bodyName>base_link</bodyName>
     <topicName>ground_truth/state</topicName>
     <gaussianNoise>0.01</gaussianNoise>
-    <frameName>world</frameName>
+    <frameName>map</frameName>
     <xyzOffsets>0 0 0</xyzOffsets>
     <rpyOffsets>0 0 0</rpyOffsets>
   </plugin>
 </gazebo>
 
 <gazebo>
-  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-    <robotNamespace>sahayak</robotNamespace>
-  </plugin>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
 </gazebo>
+
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="Wheel_right_back_J">

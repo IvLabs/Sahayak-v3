@@ -3,3 +3,4 @@ numpy
 rowan
 scipy
 matplotlib
+pynput

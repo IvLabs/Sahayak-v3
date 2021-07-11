@@ -1,8 +1,28 @@
+<!-- <launch>
+  <include
+    file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 40" />
+  <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -model sahayak"
+    output="screen" />
+  <node
+    name="fake_joint_calibration"
+    pkg="rostopic"
+    type="rostopic"
+    args="pub /calibrated std_msgs/Bool true" />
+</launch> -->
 <launch>
   <arg name="debug" default="false" />
   <arg name="gui" default="true" />
   <arg name="pause" default="false" />
-  <arg name="world" default="$(find sahayak)/world/cafe.world" />
+  <arg name="world" default="$(find sahayak)/world/my_world.world" />
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" >
      <arg name="world_name" value="$(arg world)" />
@@ -15,12 +35,12 @@
     name="tf_footprint_base"
     pkg="tf"
     type="static_transform_publisher"
-    args="0 0 0 0 0 0 base_link base_footprint 40" />
+    args="0 0 0 0 0 0 base_footprint base_link 40" />
   <node
     name="spawn_model"
     pkg="gazebo_ros"
     type="spawn_model"
-    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -x -0.05 -y 0.073 -z 0.29 -R -1.57 -P 0.00 -Y -3.134 -model sahayak"
+    args="-file $(find sahayak)/urdf/sahayak.urdf -urdf -x -0.05 -y 0.073 -z 0.29 -R 0 -P 0.00 -Y -3.134 -model sahayak"
     output="screen" />
   <node
     name="fake_joint_calibration"

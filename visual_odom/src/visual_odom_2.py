@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import rospy
 from cv_bridge import CvBridge
 from sensor_msgs.msg import Image, CameraInfo
