@@ -24,6 +24,6 @@
     args="-d $(find sahayak_mapping)/rviz/mapping.rviz" />
 
   <node pkg="sahayak_navigation" type="scan_matcher_topic.py" name="scan_matcher_odometry" />
-  <include file="$(find sahayak_navigation)/launch/scan_matcher.launch" />
+
   <include file="$(find sahayak_mapping)/launch/gmap-launch/mapping_gmap.launch" />
 </launch>
