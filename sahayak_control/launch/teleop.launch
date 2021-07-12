@@ -1,0 +1,7 @@
+<launch>
+
+  <include file="$(find sahayak)/launch/gazebo.launch" />
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+  <include file="$(find sahayak_control)/launch/sahayak_control.launch" />
+  <node pkg="sahayak_control" type="vel_control.py" name="vel_control" output="screen"/>
+</launch>

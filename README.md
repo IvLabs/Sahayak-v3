@@ -19,6 +19,11 @@ xargs sudo apt install < ros_requirements.txt
 ## Result
 ### ROS Controls:
 #### Teleoperation using Keyboard inputs
+For teleoperation of Sahayak run the below command in terminal:
+
+```shell
+roslaunch sahayak_control teleop.launch
+```
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/64685403/121785722-15dbcc00-cbd9-11eb-86ee-6b86179110eb.gif" width="500">
