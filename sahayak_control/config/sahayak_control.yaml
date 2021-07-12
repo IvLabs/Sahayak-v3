@@ -1,23 +1,29 @@
-sahayak:
-  # Publish all joint states -----------------------------------
-  joint_state_controller:
-    type: joint_state_controller/JointStateController
-    publish_rate: 50  
 
-  # Velocity Controllers ---------------------------------------
-  joint1_vel_controller:
-    type: velocity_controllers/JointVelocityController
-    joint: Wheel_right_back_J
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint2_vel_controller:
-    type: velocity_controllers/JointVelocityController
-    joint: Wheel_left_back_J
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint3_vel_controller:
-    type: velocity_controllers/JointVelocityController
-    joint: Wheel_right_front_J
-    pid: {p: 100.0, i: 0.01, d: 10.0}
-  joint4_vel_controller:
-    type: velocity_controllers/JointVelocityController
-    joint: Wheel_left_front_J
-    pid: {p: 100.0, i: 0.01, d: 10.0}
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  
+
+# Velocity Controllers ---------------------------------------
+joint1_vel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: Wheel_right_back_J
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+joint2_vel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: Wheel_left_back_J
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+joint3_vel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: Wheel_right_front_J
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+joint4_vel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: Wheel_left_front_J
+  pid: {p: 100.0, i: 0.01, d: 10.0}
+
+# gazebo_ros_control/pid_gains:
+#   Wheel_right_back_J: {p: 100.0, i: 0.01, d: 10.0}
+#   Wheel_left_back_J: {p: 100.0, i: 0.01, d: 10.0}
+#   Wheel_right_front_J: {p: 100.0, i: 0.01, d: 10.0}
+#   Wheel_left_front_J: {p: 100.0, i: 0.01, d: 10.0}

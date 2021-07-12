@@ -5,14 +5,14 @@
 
   <!-- load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" ns="/sahayak" args="
+    output="screen"  args="
     joint_state_controller
     joint1_vel_controller joint2_vel_controller joint3_vel_controller joint4_vel_controller "/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+ <!--  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
     respawn="false" output="screen">
     <remap from="/joint_states" to="/sahayak/joint_states" />
-  </node>
+  </node> -->
 
 </launch>

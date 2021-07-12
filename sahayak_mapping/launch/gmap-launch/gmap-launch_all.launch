@@ -1,0 +1,29 @@
+<launch>
+
+  <include file="$(find sahayak)/launch/gazebo.launch" />
+  <include file="$(find sahayak_control)/launch/sahayak_control.launch" />
+  <node pkg = "sahayak_control" type="vel_control.py" name="vel_control" output="screen" />
+
+  <arg
+    name="model" />
+  <param
+    name="robot_description"
+    textfile="$(find sahayak)/urdf/sahayak.urdf" />
+<!--   <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" /> -->
+  <node
+    name="robot_state_publisher"
+    pkg="robot_state_publisher"
+    type="robot_state_publisher" />
+  <node
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find sahayak_mapping)/rviz/mapping.rviz" />
+
+  <node pkg="sahayak_navigation" type="scan_matcher_topic.py" name="scan_matcher_odometry" />
+
+  <include file="$(find sahayak_mapping)/launch/gmap-launch/mapping_gmap.launch" />
+</launch>

@@ -375,6 +375,7 @@
           <geometry>
             <mesh>
               <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
         </visual>
@@ -391,7 +392,7 @@
           <pose frame=''>0 0 0.755 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.913 0.913 0.04</size>
+              <size>0.913 0.913 0.32</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -454,6 +455,7 @@
           <geometry>
             <mesh>
               <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
         </visual>
@@ -470,7 +472,7 @@
           <pose frame=''>0 0 0.755 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.913 0.913 0.04</size>
+              <size>0.913 0.913 0.32</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -533,6 +535,7 @@
           <geometry>
             <mesh>
               <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
         </visual>
@@ -549,7 +552,7 @@
           <pose frame=''>0 0 0.755 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.913 0.913 0.04</size>
+              <size>0.913 0.913 0.32</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -612,6 +615,7 @@
           <geometry>
             <mesh>
               <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+              <scale>1 1 1</scale>
             </mesh>
           </geometry>
         </visual>
@@ -680,13 +684,13 @@
         <visual name='visual'>
           <geometry>
             <sphere>
-              <radius>0.5</radius>
+              <radius>0.6</radius>
             </sphere>
           </geometry>
           <material>
             <script>
-              <name>Gazebo/Grey</name>
               <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
             </script>
           </material>
         </visual>
@@ -738,8 +742,8 @@
           </geometry>
           <material>
             <script>
-              <name>Gazebo/Grey</name>
               <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
             </script>
           </material>
         </visual>
@@ -755,7 +759,7 @@
           <pose frame=''>0 0 0.755 0 -0 0</pose>
           <geometry>
             <box>
-              <size>0.913 0.913 0.04</size>
+              <size>0.913 0.913 0.32</size>
             </box>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -818,6 +822,7 @@
           <geometry>
             <mesh>
               <uri>model://cafe_table/meshes/cafe_table.dae</uri>
+              <scale>1 1 1.25</scale>
             </mesh>
           </geometry>
         </visual>
@@ -872,8 +877,8 @@
           </geometry>
           <material>
             <script>
-              <name>Gazebo/Grey</name>
               <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
             </script>
           </material>
         </visual>
@@ -925,8 +930,8 @@
           </geometry>
           <material>
             <script>
-              <name>Gazebo/Grey</name>
               <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
             </script>
           </material>
         </visual>
