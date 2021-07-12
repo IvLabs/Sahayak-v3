@@ -8,7 +8,9 @@ pip install -r requirement.txt
 ``` shell
 xargs sudo apt install < ros_requirements.txt
 ```
-## CAD Model of Sahayak
+## CAD Model of Sahayak 
+* URDF and mesh files of the SolidWorks Assembly are generated using the [sw_urdf_exporter](http://wiki.ros.org/sw_urdf_exporter).
+* After installing the exporter, the `SW2URDF` add-in gets appended in the add-ins list of SolidWorks. Further detailed instructions are documented [here](http://wiki.ros.org/sw_urdf_exporter/Tutorials/Export%20an%20Assembly).
 <p align="center">
 <img src="https://user-images.githubusercontent.com/64797216/125199209-c0034e00-e282-11eb-9d1a-38fca513cba6.gif" width="400">
 </p>
