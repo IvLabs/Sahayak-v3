@@ -1,4 +1,4 @@
-# Sahayak-v3
+# Sahayak - An Autonomous Covid Aid-Bot
 
 ## Python Requirements
 ``` shell
