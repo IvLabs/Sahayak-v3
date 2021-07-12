@@ -26,6 +26,10 @@ xargs sudo apt install < ros_requirements.txt
 
 ### Visual Odometry:
 Implemented Visual Odometry pipeline using the following 
+``` shell
+roslaunch visual_odom launch_all.launch
+rosrun visual_odom optical_pnp.py 
+```
 * 2D to 2D Motion Estimation Algorithm
 
 <p align="center">
@@ -48,9 +52,13 @@ Implemented Visual Odometry pipeline using the following
 
 To map the default enviroment using GMapping run the below commands in seperate terminals:
  
-* ``` roslaunch sahayak_mapping gmap-launch_all.launch```
+```shell
+roslaunch sahayak_mapping gmap-launch_all.launch
+```
 
-* ``` roslaunch sahayak_navigation scan_matcher.launch```
+```shell
+roslaunch sahayak_navigation scan_matcher.launch
+```
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/69981745/125203882-3a8a9880-e298-11eb-830b-166dbaab8e16.gif" width="500">
@@ -66,7 +74,9 @@ To map the default enviroment using GMapping run the below commands in seperate 
 [RTAB-Map](http://wiki.ros.org/rtabmap_ros) is a ROS Package which uses a RGB-D camera to generate a 3D map of an enviroment.
 
 To map the default enviroment using RTAB Map run:
-* ```roslaunch sahayak_mapping rtab-mapping.launch ```
+```shell
+roslaunch sahayak_mapping rtab-mapping.launch
+```
 <p align="center">
 <img src="https://user-images.githubusercontent.com/64797216/121785126-98628c80-cbd5-11eb-9d54-c349228d4ee7.gif" width="500">
 </p>
