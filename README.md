@@ -73,7 +73,8 @@ To map the default enviroment using RTAB Map run:
 
 ### ROS Navigation Stack:
 
-#### AMCL (Adaptive Monte Carlo Localisation)
+#### AMCL 
+Sahayak was localised in a generated map using Adaptive Monte Carlo Localisation (AMCL) which uses adaptive particle filters.
 <p align="center">
 <img src="https://user-images.githubusercontent.com/69981745/125203696-2befb180-e297-11eb-93c2-7971d5cc969d.gif" width="600">
 </p>
