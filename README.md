@@ -12,7 +12,7 @@ xargs sudo apt install < ros_requirements.txt
 * URDF and mesh files of the SolidWorks Assembly are generated using the [sw_urdf_exporter](http://wiki.ros.org/sw_urdf_exporter).
 * After installing the exporter, the `SW2URDF` add-in gets appended in the add-ins list of SolidWorks. Further detailed instructions are documented [here](http://wiki.ros.org/sw_urdf_exporter/Tutorials/Export%20an%20Assembly).
 <p align="center">
-<img src="https://user-images.githubusercontent.com/64685403/132856627-7b89011c-9bf7-453c-9068-1c5f23a0e251.gif" width="400">
+<img src="https://user-images.githubusercontent.com/64685403/132857785-d6f70385-3a5a-43d3-9c87-5cd9a9a209a8.gif" width="400">
 </p>
 
 
