@@ -35,6 +35,9 @@ Implemented Visual Odometry pipeline using the following
 roslaunch visual_odom launch_all.launch
 rosrun visual_odom optical_pnp.py 
 ```
+<p align="center">
+<img src="https://user-images.githubusercontent.com/64685403/138917122-9e9af6f9-031c-4aa0-a81c-f3d246763067.gif" height="220" width="460">
+</p>
 * 2D to 2D Motion Estimation Algorithm
 
 <p align="center">
